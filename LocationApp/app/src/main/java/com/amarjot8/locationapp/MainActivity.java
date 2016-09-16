@@ -1,5 +1,6 @@
 package com.amarjot8.locationapp;
 
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,6 +38,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         updateLog("Lifecycle","onCreate");
+        updateGpsStatus(Status.UNKNOWN);
+
+        //Getting package manager  & Asking if this phone has GPS
+        PackageManager packageManager = this.getPackageManager();
+        boolean hasGPS = packageManager.hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS);
+        if(hasGPS)
+            updateGpsStatus(Status.UNKNOWN);
+        else
+            updateGpsStatus(Status.UNAVAILABLE);
     }
 
     protected void updateLog(String tag, String message)
