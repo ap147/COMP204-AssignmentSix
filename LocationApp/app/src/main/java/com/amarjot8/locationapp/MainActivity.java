@@ -1,11 +1,13 @@
 package com.amarjot8.locationapp;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         updateLog("Lifecycle","onPause");
+
     }
 
     @Override
@@ -88,6 +91,39 @@ public class MainActivity extends AppCompatActivity {
             updateGpsStatus(Status.UNKNOWN);
         else
             updateGpsStatus(Status.UNAVAILABLE);
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        //Check if GPS permission was granted
+        if(ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION},12);
+            return;
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        //Going through permissions
+        for(int i =0; i < permissions.length; i++)
+        {
+            //when GPS permission is found
+            if(permissions[i].compareTo(Manifest.permission.ACCESS_FINE_LOCATION) == 0)
+            {
+                //Check if it was denied & change status accordingly
+                if(grantResults[i] == PackageManager.PERMISSION_DENIED)
+                {
+                    updateLog("Error", "User Denied GPS Permistion");
+                    updateGpsStatus(Status.DISABLED);
+                }
+                else if(grantResults[i] == PackageManager.PERMISSION_GRANTED)
+                {
+                    updateGpsStatus(Status.ENABLED);
+                }
+            }
+        }
     }
 
     protected void updateLog(String tag, String message)

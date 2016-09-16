@@ -56,4 +56,70 @@
             android:text="Unknown"
             />
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:orientation="horizontal"
+        android:layout_gravity="left"
+       >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="25dp"
+                android:layout_weight="1"
+                android:paddingLeft="100dp"
+                android:paddingTop="30dp"
+                android:gravity="center_vertical"
+                android:textSize="20dp"
+                android:text="Lat"
+                />
+
+            <TextView
+                android:id="@+id/lon_vol"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingLeft="100dp"
+                android:paddingBottom="50dp"
+                android:gravity="center_vertical"
+                android:text="Lon_val"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="25dp"
+                android:layout_weight="1"
+                android:paddingLeft="100dp"
+                android:paddingTop="30dp"
+
+                android:textSize="20dp"
+                android:text="Lon"
+                />
+
+            <TextView
+                android:id="@+id/lan_val"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingLeft="100dp"
+                android:paddingBottom="50dp"
+
+                android:text="Lat_val"
+                />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
 </LinearLayout>
