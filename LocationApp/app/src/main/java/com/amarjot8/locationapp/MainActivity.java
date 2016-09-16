@@ -1,5 +1,6 @@
 package com.amarjot8.locationapp;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -56,5 +57,36 @@ public class MainActivity extends AppCompatActivity {
         //Getting textbox & altering to the recent method called
         TextView textView = (TextView) findViewById(R.id.currentLifecycle);
         textView.setText(message);
+    }
+    protected enum Status{
+        UNKNOWN, ENABLED, DISABLED, UNAVAILABLE
+    }
+    protected void updateGpsStatus(Status message)
+    {
+        //Getting textview & changing status
+        TextView textView = (TextView) findViewById(R.id.currentGpustatus);
+        textView.setText(message.toString());
+        Status s = message;
+
+        //Depending on what case it is change text color
+        switch (s)
+        {
+            case UNKNOWN:
+                //Orange
+                textView.setTextColor(Color.parseColor("#FFA500"));
+                break;
+
+            case ENABLED:
+                textView.setTextColor(Color.GREEN);
+                break;
+
+            case DISABLED:
+                textView.setTextColor(Color.RED);
+                break;
+
+            case UNAVAILABLE:
+                textView.setTextColor(Color.BLUE);
+                break;
+        }
     }
 }
