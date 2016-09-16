@@ -3,6 +3,7 @@ package com.amarjot8.locationapp;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
     //Add code to your project that outputs messages to the debug log when a lifecycle method is called
@@ -48,6 +49,12 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
+        updateLifecycleText(message);
+    }
+    protected void updateLifecycleText(String message)
+    {
+        //Getting textbox & altering to the recent method called
+        TextView textView = (TextView) findViewById(R.id.currentLifecycle);
+        textView.setText(message);
     }
 }
