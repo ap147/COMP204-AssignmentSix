@@ -190,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
                 else
                 {
                     this.updateGpsStatus(Status.DISABLED);
+                    updateLog("GPS: ","GPS is turned off, Please enable" );
                 }
 
 
