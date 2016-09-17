@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {
-            
+
         }
 
         @Override
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onProviderDisabled(String provider) {
-            //requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 12);
+
         }
     };
 
@@ -51,18 +51,26 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         updateLog("Lifecycle", "onResume");
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+        //If permissions wernt granted then ask for them
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+        else
+        {
+            updateGpsStatus(Status.ENABLED);
+        }
+        try
+        {
+            if(locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ))
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+            else
+                requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION},12);
+
+        }
+        catch (SecurityException e)
+        {
+
+        }
 
     }
 
@@ -70,15 +78,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         updateLog("Lifecycle", "onPause");
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
+        }
+        else
+        {
+            updateGpsStatus(Status.ENABLED);
         }
         locationManager.removeUpdates(locationListener);
     }
@@ -104,11 +109,15 @@ public class MainActivity extends AppCompatActivity {
             updateGpsStatus(Status.UNAVAILABLE);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        //Check if GPS permission was granted
+        //Check if GPS permission was granted if not request them
         if(ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
         {
             requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION},12);
             return;
+        }
+        else
+        {
+            updateGpsStatus(Status.ENABLED);
         }
     }
 
@@ -174,8 +183,15 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case ENABLED:
-                textView.setTextColor(Color.GREEN);
-                break;
+                if ( locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+                    textView.setTextColor(Color.GREEN);
+                    break;
+                }
+                else
+                {
+                    this.updateGpsStatus(Status.DISABLED);
+                }
+
 
             case DISABLED:
                 textView.setTextColor(Color.RED);
