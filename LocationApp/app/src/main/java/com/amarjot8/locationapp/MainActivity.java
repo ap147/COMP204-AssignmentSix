@@ -13,13 +13,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
-
+//https://www.youtube.com/watch?v=QNb_3QKSmMk
 public class MainActivity extends AppCompatActivity {
     LocationManager locationManager;
     LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
-
+            double lat = location.getLatitude();
+            updateLat_val(lat);
+            double lon = location.getLongitude();
+            updateLon_val(lon);
         }
 
         @Override
@@ -63,15 +66,13 @@ public class MainActivity extends AppCompatActivity {
         {
             if(locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ))
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
-            else
-                requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION},12);
 
+            else
+                updateGpsStatus(Status.DISABLED);
         }
         catch (SecurityException e)
         {
-
         }
-
     }
 
     @Override
@@ -202,5 +203,18 @@ public class MainActivity extends AppCompatActivity {
                 textView.setTextColor(Color.BLUE);
                 break;
         }
+    }
+    protected void updateLat_val(double lat)
+    {
+        //Getting textview & changing status
+        TextView textView = (TextView) findViewById(R.id.lat_val);
+        String x = "" + lat;
+        textView.setText(x);
+    }
+    protected void updateLon_val(double lon){
+        //Getting textview & changing status
+        TextView textView = (TextView) findViewById(R.id.lon_val);
+        String x = "" + lon;
+        textView.setText(x);
     }
 }
