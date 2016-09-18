@@ -20,6 +20,7 @@ import android.widget.TextView;
 import java.math.RoundingMode;
 
 //https://www.youtube.com/watch?v=QNb_3QKSmMk
+//http://stackoverflow.com/questions/153724/how-to-round-a-number-to-n-decimal-places-in-java
 public class MainActivity extends AppCompatActivity {
     LocationManager locationManager;
     LocationListener locationListener = new LocationListener() {
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         try
         {
             if(locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ))
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 50, 10, locationListener);
 
             else
                 updateGpsStatus(Status.DISABLED);
