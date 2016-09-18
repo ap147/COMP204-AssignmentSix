@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
+            updateLog("Location", "Location Changed");
             double lat = location.getLatitude();
             updateLat_val(lat);
             double lon = location.getLongitude();
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         try
         {
             if(locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ))
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 50, 10, locationListener);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 10, locationListener);
 
             else
                 updateGpsStatus(Status.DISABLED);
@@ -219,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
         TextView textView = (TextView) findViewById(R.id.lat_val);
         String x = "" + roundedDown;
         textView.setText(x);
+        updateLog("Lat", "updating lat");
     }
     protected void updateLon_val(double lon){
         double roundedDown = (double)Math.round(lon * 10000d) / 10000d;
@@ -226,5 +228,6 @@ public class MainActivity extends AppCompatActivity {
         TextView textView = (TextView) findViewById(R.id.lon_val);
         String x = "" + roundedDown;
         textView.setText(x);
+        updateLog("Lon", "updating lon");
     }
 }
