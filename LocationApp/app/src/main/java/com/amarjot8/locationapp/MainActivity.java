@@ -9,19 +9,33 @@ import android.icu.text.DecimalFormat;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.math.RoundingMode;
+import java.util.Arrays;
+import java.util.List;
 
 //https://www.youtube.com/watch?v=QNb_3QKSmMk
 //http://stackoverflow.com/questions/153724/how-to-round-a-number-to-n-decimal-places-in-java
+
+
+
 public class MainActivity extends AppCompatActivity {
+    List<SpinnerItem> spinnerList = Arrays.asList(
+            // Items created here will be initialized into the list
+            new SpinnerItem("An Item", Uri.parse("")),
+            new SpinnerItem("B", Uri.parse(""))
+    );
+
     LocationManager locationManager;
     LocationListener locationListener = new LocationListener() {
         @Override
@@ -128,6 +142,8 @@ public class MainActivity extends AppCompatActivity {
         {
             updateGpsStatus(Status.ENABLED);
         }
+
+        ((Spinner) findViewById(R.id.spinner_id)).setAdapter(new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, spinnerList));
     }
 
     @Override
