@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
             updateGpsStatus(Status.ENABLED);
         }
 
-        ((Spinner) findViewById(R.id.spinner_id)).setAdapter(new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, spinnerList));
+        ((Spinner) findViewById(R.id.spinner)).setAdapter(new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, spinnerList));
     }
 
     @Override
