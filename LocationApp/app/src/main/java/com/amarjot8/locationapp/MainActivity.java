@@ -3,6 +3,7 @@ package com.amarjot8.locationapp;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.icu.text.DecimalFormat;
@@ -36,18 +37,21 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     List<SpinnerItem> spinnerList = Arrays.asList(
             // Items created here will be initialized into the list
-            new SpinnerItem("From GPS", Uri.parse(""))
+            new SpinnerItem("From GPS", Uri.parse("google.streetview:cbll="))
             ,new SpinnerItem("Disable Button", Uri.parse(""))
     );
 
+    String Selected = "";
+    Double lat;
+    Double lon;
     LocationManager locationManager;
     LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
             updateLog("Location", "Location Changed");
-            double lat = location.getLatitude();
+            lat = location.getLatitude();
             updateLat_val(lat);
-            double lon = location.getLongitude();
+            lon = location.getLongitude();
             updateLon_val(lon);
         }
 
@@ -101,6 +105,9 @@ public class MainActivity extends AppCompatActivity {
         catch (SecurityException e)
         {
         }
+
+
+
     }
 
     @Override
@@ -149,13 +156,14 @@ public class MainActivity extends AppCompatActivity {
             updateGpsStatus(Status.ENABLED);
         }
         ((Spinner) findViewById(R.id.spinner)).setAdapter(new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, spinnerList));
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        final Spinner spinner = (Spinner) findViewById(R.id.spinner);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 TextView t = (TextView)view;
                if(t.getText().equals("From GPS"))
                 {
+                    Selected = "From GPS";
                     updateLog("GPS", "Enabling Button");
                     Button b = (Button) findViewById(R.id.button);
                     if(!checkIfGPSEnabled())
@@ -185,7 +193,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button b = (Button) findViewById(R.id.button);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateLog("test", "button clicked");
+                Uri uri;
+                if(Selected.equals("From GPS"))
+                {
+                   // uri =  Uri.parse("geo:37.7749,-122.4194");
+                    uri = Uri.parse("geo:"+ lat+","+ lon);
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, uri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                        startActivity(mapIntent);
+                    }
 
+
+
+                }
+            }
+        });
     }
 
     @Override
