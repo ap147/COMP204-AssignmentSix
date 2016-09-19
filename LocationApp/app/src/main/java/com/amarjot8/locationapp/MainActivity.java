@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     List<SpinnerItem> spinnerList = Arrays.asList(
             // Items created here will be initialized into the list
             new SpinnerItem("From GPS", Uri.parse(""))
+            ,new SpinnerItem("Disable Button", Uri.parse(""))
     );
 
     LocationManager locationManager;
@@ -73,12 +74,14 @@ public class MainActivity extends AppCompatActivity {
         //Use the tag Lifecycle for these messages
         //Simply printing the name of the called method will be sufficient
         updateLog("Lifecycle", "onStart");
+        updateLifecycleText("onStart");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         updateLog("Lifecycle", "onResume");
+        updateLifecycleText("onResume");
         //If permissions wernt granted then ask for them
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -153,18 +156,27 @@ public class MainActivity extends AppCompatActivity {
                 TextView t = (TextView)view;
                if(t.getText().equals("From GPS"))
                 {
+                    updateLog("GPS", "Enabling Button");
                     Button b = (Button) findViewById(R.id.button);
                     if(!checkIfGPSEnabled())
                     {
                         updateLog("Button", "Disableing Button");
                         b.setEnabled(false);
+                        updateGpsStatus(Status.DISABLED);
                     }
                     else
                     {
                         updateLog("Button", "Enabling Button");
                         b.setEnabled(true);
                     }
+                    updateLog("GPS", checkIfGPSEnabled()+ "");
                 }
+                else if(t.getText().equals("Disable Button"))
+               {
+                   Button b = (Button) findViewById(R.id.button);
+                   b.setEnabled(false);
+
+               }
             }
 
             @Override
@@ -211,7 +223,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        updateLifecycleText(message);
     }
     protected void updateLifecycleText(String message)
     {
