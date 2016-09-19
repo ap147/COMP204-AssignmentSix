@@ -31,6 +31,7 @@ import java.util.List;
 
 //https://www.youtube.com/watch?v=QNb_3QKSmMk
 //http://stackoverflow.com/questions/153724/how-to-round-a-number-to-n-decimal-places-in-java
+//https://developers.google.com/maps/documentation/android-api/intents
 
 
 
@@ -43,10 +44,12 @@ public class MainActivity extends AppCompatActivity {
             ,  new SpinnerItem("Fifth Ave, Tauranga", Uri.parse("geo:0,0?q=Fifth+Ave,+Tauranga"))
             , new SpinnerItem("Main Street Wellington", Uri.parse("geo:-41.2442851,174.6217706?q=Main+St,+Upper+Hutt+5018"))
     );
-
+    //Used to check what Location is selected when Map selection button clicked
     String Selected = "";
+    //Used to send data to google maps about where device is located
     Double lat;
     Double lon;
+
     LocationManager locationManager;
     LocationListener locationListener = new LocationListener() {
         @Override
@@ -89,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         updateLog("Lifecycle", "onResume");
         updateLifecycleText("onResume");
-        //If permissions wernt granted then ask for them
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
@@ -117,7 +119,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         updateLog("Lifecycle", "onPause");
+        //If permissions wernt granted then ask for them
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+          //  requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION},12);
             return;
         }
         else
@@ -152,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         if(ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
         {
             requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION},12);
-            return;
+            //return;
         }
         else
         {
@@ -187,23 +191,6 @@ public class MainActivity extends AppCompatActivity {
                    b.setEnabled(true);
                    Selected = t.getText().toString();
                }
-               /*if(t.getText().equals("Waikato Uni"))
-                {
-                    Selected = "Waikato Uni";
-                    b.setEnabled(true);
-                }
-                else if(t.getText().equals("Fifth Ave, Tauranga"))
-               {
-                   Selected= "Fifth Ave, Tauranga";
-                   b.setEnabled(true);
-               }
-                else if(t.getText().equals("Auckland Uni"))
-               {
-                   Selected= "Auckland Uni";
-                   b.setEnabled(true);
-               }
-                else if(t.s)
-                */
             }
 
             @Override
@@ -213,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         Button b = (Button) findViewById(R.id.button);
+        //What to do when map selection button is clicked
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
