@@ -119,7 +119,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="50dp"
-
                         android:text="Lat_val"/>
                 </LinearLayout>
             </LinearLayout>
@@ -131,6 +130,21 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:prompt="@string/spinner"/>
+
+    <LinearLayout
+        android:layout_width="150dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/button"
+            android:text="MAP SELECTION"/>
+
+    </LinearLayout>
 </LinearLayout>
 
 
