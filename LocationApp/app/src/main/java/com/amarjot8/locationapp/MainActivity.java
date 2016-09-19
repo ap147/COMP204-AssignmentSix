@@ -38,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
     List<SpinnerItem> spinnerList = Arrays.asList(
             // Items created here will be initialized into the list
             new SpinnerItem("From GPS", Uri.parse("google.streetview:cbll="))
-            ,new SpinnerItem("Disable Button", Uri.parse(""))
+            , new SpinnerItem("Waikato Uni", Uri.parse("geo:-37.786778,175.3160027"))
+
     );
 
     String Selected = "";
@@ -161,11 +162,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 TextView t = (TextView)view;
+                Button b = (Button) findViewById(R.id.button);
                if(t.getText().equals("From GPS"))
                 {
                     Selected = "From GPS";
                     updateLog("GPS", "Enabling Button");
-                    Button b = (Button) findViewById(R.id.button);
+
                     if(!checkIfGPSEnabled())
                     {
                         updateLog("Button", "Disableing Button");
@@ -179,12 +181,12 @@ public class MainActivity extends AppCompatActivity {
                     }
                     updateLog("GPS", checkIfGPSEnabled()+ "");
                 }
-                else if(t.getText().equals("Disable Button"))
-               {
-                   Button b = (Button) findViewById(R.id.button);
-                   b.setEnabled(false);
-
-               }
+                else if(t.getText().equals("Waikato Uni"))
+                {
+                   Selected = "Waikato Uni";
+                    updateLog("Button", "Enabling Button");
+                    b.setEnabled(true);
+                }
             }
 
             @Override
@@ -199,18 +201,26 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 updateLog("test", "button clicked");
                 Uri uri;
+                Intent mapIntent;
                 if(Selected.equals("From GPS"))
                 {
                    // uri =  Uri.parse("geo:37.7749,-122.4194");
                     uri = Uri.parse("geo:"+ lat+","+ lon);
-                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, uri);
+                    mapIntent = new Intent(Intent.ACTION_VIEW, uri);
                     mapIntent.setPackage("com.google.android.apps.maps");
                     if (mapIntent.resolveActivity(getPackageManager()) != null) {
                         startActivity(mapIntent);
                     }
-
-
-
+                }
+                else if (Selected.equals("Waikato Uni"))
+                {
+                    updateLog("test", "Waiakto Uni");
+                    uri = spinnerList.get(1).uri;
+                    mapIntent = new Intent(Intent.ACTION_VIEW, uri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                        startActivity(mapIntent);
+                    }
                 }
             }
         });
