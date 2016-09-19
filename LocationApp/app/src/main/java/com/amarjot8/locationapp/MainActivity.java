@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
             // Items created here will be initialized into the list
             new SpinnerItem("From GPS", Uri.parse("google.streetview:cbll="))
             , new SpinnerItem("Waikato Uni", Uri.parse("geo:-37.786778,175.3160027"))
+            ,  new SpinnerItem("Auckland Uni", Uri.parse("geo:0,0?q=The+University+of+Auckland"))
+            ,  new SpinnerItem("Fifth Ave, Tauranga", Uri.parse("geo:0,0?q=Fifth+Ave,+Tauranga"))
 
     );
 
@@ -102,11 +104,11 @@ public class MainActivity extends AppCompatActivity {
 
             else
                 updateGpsStatus(Status.DISABLED);
+
         }
         catch (SecurityException e)
         {
         }
-
 
 
     }
@@ -166,27 +168,35 @@ public class MainActivity extends AppCompatActivity {
                if(t.getText().equals("From GPS"))
                 {
                     Selected = "From GPS";
-                    updateLog("GPS", "Enabling Button");
 
                     if(!checkIfGPSEnabled())
                     {
-                        updateLog("Button", "Disableing Button");
-                        b.setEnabled(false);
                         updateGpsStatus(Status.DISABLED);
+                        b.setEnabled(false);
+
                     }
                     else
                     {
-                        updateLog("Button", "Enabling Button");
+                        updateGpsStatus(Status.ENABLED);
                         b.setEnabled(true);
                     }
                     updateLog("GPS", checkIfGPSEnabled()+ "");
                 }
                 else if(t.getText().equals("Waikato Uni"))
                 {
-                   Selected = "Waikato Uni";
-                    updateLog("Button", "Enabling Button");
+                    Selected = "Waikato Uni";
                     b.setEnabled(true);
                 }
+                else if(t.getText().equals("Fifth Ave, Tauranga"))
+               {
+                   Selected= "Fifth Ave, Tauranga";
+                   b.setEnabled(true);
+               }
+                else if(t.getText().equals("Auckland Uni"))
+               {
+                   Selected= "Auckland Uni";
+                   b.setEnabled(true);
+               }
             }
 
             @Override
@@ -205,16 +215,18 @@ public class MainActivity extends AppCompatActivity {
                 if(Selected.equals("From GPS"))
                 {
                    // uri =  Uri.parse("geo:37.7749,-122.4194");
-                    uri = Uri.parse("geo:"+ lat+","+ lon);
-                    mapIntent = new Intent(Intent.ACTION_VIEW, uri);
-                    mapIntent.setPackage("com.google.android.apps.maps");
-                    if (mapIntent.resolveActivity(getPackageManager()) != null) {
-                        startActivity(mapIntent);
+                    if(lat != null & lon !=null)
+                    {
+                        uri = Uri.parse("geo:" + lat + "," + lon);
+                        mapIntent = new Intent(Intent.ACTION_VIEW, uri);
+                        mapIntent.setPackage("com.google.android.apps.maps");
+                        if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                            startActivity(mapIntent);
+                        }
                     }
                 }
                 else if (Selected.equals("Waikato Uni"))
                 {
-                    updateLog("test", "Waiakto Uni");
                     uri = spinnerList.get(1).uri;
                     mapIntent = new Intent(Intent.ACTION_VIEW, uri);
                     mapIntent.setPackage("com.google.android.apps.maps");
@@ -222,6 +234,25 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(mapIntent);
                     }
                 }
+                else if(Selected.equals("Auckland Uni"))
+                {
+                    uri = spinnerList.get(2).uri;
+                    mapIntent = new Intent(Intent.ACTION_VIEW, uri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                        startActivity(mapIntent);
+                    }
+                }
+                else if(Selected.equals("Fifth Ave, Tauranga"))
+                {
+                    uri = spinnerList.get(3).uri;
+                    mapIntent = new Intent(Intent.ACTION_VIEW, uri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                        startActivity(mapIntent);
+                    }
+                }
+
             }
         });
     }
@@ -330,4 +361,5 @@ public class MainActivity extends AppCompatActivity {
         textView.setText(x);
         updateLog("Lon", "updating lon");
     }
+
 }
