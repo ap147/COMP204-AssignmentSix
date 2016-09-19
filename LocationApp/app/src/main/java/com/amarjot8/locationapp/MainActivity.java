@@ -16,9 +16,13 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.math.RoundingMode;
 import java.util.Arrays;
@@ -32,8 +36,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     List<SpinnerItem> spinnerList = Arrays.asList(
             // Items created here will be initialized into the list
-            new SpinnerItem("An Item", Uri.parse("")),
-            new SpinnerItem("B", Uri.parse(""))
+            new SpinnerItem("From GPS", Uri.parse(""))
     );
 
     LocationManager locationManager;
@@ -86,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         }
         try
         {
-            if(locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ))
+            if(locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER))
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 10, locationListener);
 
             else
@@ -142,8 +145,35 @@ public class MainActivity extends AppCompatActivity {
         {
             updateGpsStatus(Status.ENABLED);
         }
-
         ((Spinner) findViewById(R.id.spinner)).setAdapter(new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, spinnerList));
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                TextView t = (TextView)view;
+               if(t.getText().equals("From GPS"))
+                {
+                    Button b = (Button) findViewById(R.id.button);
+                    if(!checkIfGPSEnabled())
+                    {
+                        updateLog("Button", "Disableing Button");
+                        b.setEnabled(false);
+                    }
+                    else
+                    {
+                        updateLog("Button", "Enabling Button");
+                        b.setEnabled(true);
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
     }
 
     @Override
@@ -189,6 +219,11 @@ public class MainActivity extends AppCompatActivity {
         TextView textView = (TextView) findViewById(R.id.currentLifecycle);
         textView.setText(message);
     }
+
+    protected boolean checkIfGPSEnabled(){
+        return locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER);
+    }
+
     protected enum Status{
         UNKNOWN, ENABLED, DISABLED, UNAVAILABLE
     }
