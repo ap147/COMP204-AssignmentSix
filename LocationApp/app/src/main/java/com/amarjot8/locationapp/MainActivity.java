@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
             , new SpinnerItem("Waikato Uni", Uri.parse("geo:-37.786778,175.3160027"))
             ,  new SpinnerItem("Auckland Uni", Uri.parse("geo:0,0?q=The+University+of+Auckland"))
             ,  new SpinnerItem("Fifth Ave, Tauranga", Uri.parse("geo:0,0?q=Fifth+Ave,+Tauranga"))
-
+            , new SpinnerItem("Main Street Wellington", Uri.parse("geo:-41.2442851,174.6217706?q=Main+St,+Upper+Hutt+5018"))
     );
 
     String Selected = "";
@@ -182,7 +182,12 @@ public class MainActivity extends AppCompatActivity {
                     }
                     updateLog("GPS", checkIfGPSEnabled()+ "");
                 }
-                else if(t.getText().equals("Waikato Uni"))
+                else
+               {
+                   b.setEnabled(true);
+                   Selected = t.getText().toString();
+               }
+               /*if(t.getText().equals("Waikato Uni"))
                 {
                     Selected = "Waikato Uni";
                     b.setEnabled(true);
@@ -197,6 +202,8 @@ public class MainActivity extends AppCompatActivity {
                    Selected= "Auckland Uni";
                    b.setEnabled(true);
                }
+                else if(t.s)
+                */
             }
 
             @Override
@@ -246,6 +253,15 @@ public class MainActivity extends AppCompatActivity {
                 else if(Selected.equals("Fifth Ave, Tauranga"))
                 {
                     uri = spinnerList.get(3).uri;
+                    mapIntent = new Intent(Intent.ACTION_VIEW, uri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                        startActivity(mapIntent);
+                    }
+                }
+                else if(Selected.equals("Main Street Wellington"))
+                {
+                    uri = spinnerList.get(4).uri;
                     mapIntent = new Intent(Intent.ACTION_VIEW, uri);
                     mapIntent.setPackage("com.google.android.apps.maps");
                     if (mapIntent.resolveActivity(getPackageManager()) != null) {
