@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
+            //Whenever location is changed update fields
             updateLog("Location", "Location Changed");
             lat = location.getLatitude();
             updateLat_val(lat);
@@ -92,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         updateLog("Lifecycle", "onResume");
         updateLifecycleText("onResume");
+        //If user hasnt allowed permision do nothing other wise update GPS status
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
@@ -101,18 +103,14 @@ public class MainActivity extends AppCompatActivity {
         }
         try
         {
+            //If devices GPS is turned on then listen to it , otherwise up date GPS status
             if(locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER))
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 10, locationListener);
-
             else
                 updateGpsStatus(Status.DISABLED);
-
         }
         catch (SecurityException e)
-        {
-        }
-
-
+        {}
     }
 
     @Override
@@ -121,13 +119,13 @@ public class MainActivity extends AppCompatActivity {
         updateLog("Lifecycle", "onPause");
         //If permissions wernt granted then ask for them
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-          //  requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION},12);
             return;
         }
         else
         {
             updateGpsStatus(Status.ENABLED);
         }
+        //Unregistering listener when user exits app
         locationManager.removeUpdates(locationListener);
     }
 
@@ -162,56 +160,62 @@ public class MainActivity extends AppCompatActivity {
         {
             updateGpsStatus(Status.ENABLED);
         }
+        //Adding spinnerlist to the spinner
         ((Spinner) findViewById(R.id.spinner)).setAdapter(new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, spinnerList));
+        //Getting spinner and adding a listner to it
         final Spinner spinner = (Spinner) findViewById(R.id.spinner);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //Getting what is selected
                 TextView t = (TextView)view;
+                //Getting button
                 Button b = (Button) findViewById(R.id.button);
-               if(t.getText().equals("From GPS"))
+                //If spinnner is selecting "From GPS"
+                if(t.getText().equals("From GPS"))
                 {
                     Selected = "From GPS";
-
+                    //When GPS is not On, Disable button , otherwise enable it
                     if(!checkIfGPSEnabled())
                     {
                         updateGpsStatus(Status.DISABLED);
                         b.setEnabled(false);
-
                     }
                     else
                     {
                         updateGpsStatus(Status.ENABLED);
                         b.setEnabled(true);
                     }
-                    updateLog("GPS", checkIfGPSEnabled()+ "");
                 }
+                //If anything else is selected, enable button incase it was disabled before, update Selected so we know what is selected when button is pressed
                 else
-               {
+                {
                    b.setEnabled(true);
                    Selected = t.getText().toString();
-               }
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
+        //Getting Map Selection button
         Button b = (Button) findViewById(R.id.button);
-        //What to do when map selection button is clicked
+        //What to do when its clicked
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateLog("test", "button clicked");
+                //Used to store Address which is sent to google maps
                 Uri uri;
                 Intent mapIntent;
+                //When user clicks button while "From GPS" is selected in spinner
                 if(Selected.equals("From GPS"))
                 {
-                   // uri =  Uri.parse("geo:37.7749,-122.4194");
+                    //Checking these values were updated
                     if(lat != null & lon !=null)
                     {
+                        //Sending data to google maps
                         uri = Uri.parse("geo:" + lat + "," + lon);
                         mapIntent = new Intent(Intent.ACTION_VIEW, uri);
                         mapIntent.setPackage("com.google.android.apps.maps");
@@ -261,6 +265,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //Checks if User has granted permission
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -285,6 +290,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //Prints message to log
     protected void updateLog(String tag, String message)
     {
         //printing what lifecycle method was called
@@ -295,7 +301,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
     }
     protected void updateLifecycleText(String message)
     {
@@ -308,9 +313,11 @@ public class MainActivity extends AppCompatActivity {
         return locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER);
     }
 
+    //These are the status a GPS could have
     protected enum Status{
         UNKNOWN, ENABLED, DISABLED, UNAVAILABLE
     }
+    //Updates GPS status/Color
     protected void updateGpsStatus(Status message)
     {
         //Getting textview & changing status
@@ -325,8 +332,9 @@ public class MainActivity extends AppCompatActivity {
                 //Orange
                 textView.setTextColor(Color.parseColor("#FFA500"));
                 break;
-
+            //Occurs when User had allowed GPS access & device has gps
             case ENABLED:
+                //Checking if GPS is enabled
                 if ( locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
                     textView.setTextColor(Color.GREEN);
                     break;
@@ -336,18 +344,18 @@ public class MainActivity extends AppCompatActivity {
                     this.updateGpsStatus(Status.DISABLED);
                     updateLog("GPS: ","GPS is turned off, Please enable" );
                 }
-
-
+             //Occurs when User doesnt allow GPS access or GPS is turned off
             case DISABLED:
                 textView.setTextColor(Color.RED);
                 break;
-
+            //This case only occurs when device doesnt have GPS
             case UNAVAILABLE:
                 textView.setTextColor(Color.BLUE);
                 break;
         }
     }
-    @TargetApi(Build.VERSION_CODES.N)
+
+    //These Two methods round down lat/lon to 4dp and update it
     protected void updateLat_val(double lat)
     {
         double roundedDown = (double)Math.round(lat * 10000d) / 10000d;
