@@ -33,8 +33,6 @@ import java.util.List;
 //http://stackoverflow.com/questions/153724/how-to-round-a-number-to-n-decimal-places-in-java
 //https://developers.google.com/maps/documentation/android-api/intents
 
-
-
 public class MainActivity extends AppCompatActivity {
     List<SpinnerItem> spinnerList = Arrays.asList(
             // Items created here will be initialized into the list
@@ -47,15 +45,13 @@ public class MainActivity extends AppCompatActivity {
     //Used to check what Location is selected when Map selection button clicked
     String Selected = "";
     //Used to send data to google maps about where device is located
-    Double lat;
-    Double lon;
+    Double lat; Double lon;
 
     LocationManager locationManager;
     LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
             //Whenever location is changed update fields
-            updateLog("Location", "Location Changed");
             lat = location.getLatitude();
             updateLat_val(lat);
             lon = location.getLongitude();
@@ -63,19 +59,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-
-        }
+        public void onStatusChanged(String provider, int status, Bundle extras) {}
 
         @Override
-        public void onProviderEnabled(String provider) {
-
-        }
+        public void onProviderEnabled(String provider) {}
 
         @Override
-        public void onProviderDisabled(String provider) {
-
-        }
+        public void onProviderDisabled(String provider) {}
     };
 
     //Add code to your project that outputs messages to the debug log when a lifecycle method is called
@@ -118,13 +108,12 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         updateLog("Lifecycle", "onPause");
         //If permissions wernt granted then ask for them
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             return;
-        }
+
         else
-        {
             updateGpsStatus(Status.ENABLED);
-        }
+
         //Unregistering listener when user exits app
         locationManager.removeUpdates(locationListener);
     }
@@ -152,21 +141,20 @@ public class MainActivity extends AppCompatActivity {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         //Check if GPS permission was granted if not request them
         if(ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-        {
             requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION},12);
-            //return;
-        }
+
         else
-        {
             updateGpsStatus(Status.ENABLED);
-        }
+
         //Adding spinnerlist to the spinner
         ((Spinner) findViewById(R.id.spinner)).setAdapter(new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, spinnerList));
         //Getting spinner and adding a listner to it
         final Spinner spinner = (Spinner) findViewById(R.id.spinner);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
                 //Getting what is selected
                 TextView t = (TextView)view;
                 //Getting button
@@ -177,15 +165,9 @@ public class MainActivity extends AppCompatActivity {
                     Selected = "From GPS";
                     //When GPS is not On, Disable button , otherwise enable it
                     if(!checkIfGPSEnabled())
-                    {
-                        updateGpsStatus(Status.DISABLED);
                         b.setEnabled(false);
-                    }
                     else
-                    {
-                        updateGpsStatus(Status.ENABLED);
                         b.setEnabled(true);
-                    }
                 }
                 //If anything else is selected, enable button incase it was disabled before, update Selected so we know what is selected when button is pressed
                 else
@@ -196,8 +178,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
 
         //Getting Map Selection button
@@ -208,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //Used to store Address which is sent to google maps
                 Uri uri;
-                Intent mapIntent;
+                Intent mapIntent  = null;
                 //When user clicks button while "From GPS" is selected in spinner
                 if(Selected.equals("From GPS"))
                 {
@@ -218,49 +199,34 @@ public class MainActivity extends AppCompatActivity {
                         //Sending data to google maps
                         uri = Uri.parse("geo:" + lat + "," + lon);
                         mapIntent = new Intent(Intent.ACTION_VIEW, uri);
-                        mapIntent.setPackage("com.google.android.apps.maps");
-                        if (mapIntent.resolveActivity(getPackageManager()) != null) {
-                            startActivity(mapIntent);
-                        }
                     }
                 }
                 else if (Selected.equals("Waikato Uni"))
                 {
                     uri = spinnerList.get(1).uri;
                     mapIntent = new Intent(Intent.ACTION_VIEW, uri);
-                    mapIntent.setPackage("com.google.android.apps.maps");
-                    if (mapIntent.resolveActivity(getPackageManager()) != null) {
-                        startActivity(mapIntent);
-                    }
                 }
                 else if(Selected.equals("Auckland Uni"))
                 {
                     uri = spinnerList.get(2).uri;
                     mapIntent = new Intent(Intent.ACTION_VIEW, uri);
-                    mapIntent.setPackage("com.google.android.apps.maps");
-                    if (mapIntent.resolveActivity(getPackageManager()) != null) {
-                        startActivity(mapIntent);
-                    }
                 }
                 else if(Selected.equals("Fifth Ave, Tauranga"))
                 {
                     uri = spinnerList.get(3).uri;
                     mapIntent = new Intent(Intent.ACTION_VIEW, uri);
-                    mapIntent.setPackage("com.google.android.apps.maps");
-                    if (mapIntent.resolveActivity(getPackageManager()) != null) {
-                        startActivity(mapIntent);
-                    }
                 }
                 else if(Selected.equals("Main Street Wellington"))
                 {
                     uri = spinnerList.get(4).uri;
                     mapIntent = new Intent(Intent.ACTION_VIEW, uri);
-                    mapIntent.setPackage("com.google.android.apps.maps");
-                    if (mapIntent.resolveActivity(getPackageManager()) != null) {
-                        startActivity(mapIntent);
-                    }
                 }
-
+                if(mapIntent!= null)
+                {
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    if (mapIntent.resolveActivity(getPackageManager()) != null)
+                        startActivity(mapIntent);
+                }
             }
         });
     }
@@ -278,14 +244,10 @@ public class MainActivity extends AppCompatActivity {
             {
                 //Check if it was denied & change status accordingly
                 if(grantResults[i] == PackageManager.PERMISSION_DENIED)
-                {
-                    updateLog("Error", "User Denied GPS Permistion");
                     updateGpsStatus(Status.DISABLED);
-                }
+
                 else if(grantResults[i] == PackageManager.PERMISSION_GRANTED)
-                {
                     updateGpsStatus(Status.ENABLED);
-                }
             }
         }
     }
