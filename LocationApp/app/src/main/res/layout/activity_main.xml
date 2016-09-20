@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- whole layout -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,7 +10,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     tools:context="com.amarjot8.locationapp.MainActivity">
-
+    <!--Sets up LifeCycle label and its status which gets updated whenever new lifecycle method is called -->
     <LinearLayout
         android:layout_width="150dp"
         android:layout_gravity="center_horizontal"
@@ -32,6 +33,7 @@
             android:textStyle="bold"
             />
     </LinearLayout>
+    <!--Layout resposible for setting out GPS Status label/ TextView in the center,top of screen-->
     <LinearLayout
         android:layout_width="150dp"
         android:layout_gravity="center_horizontal"
@@ -45,7 +47,6 @@
             android:gravity="center_horizontal"
             android:text="Gpu Status:"/>
 
-
         <TextView
             android:id="@+id/currentGpustatus"
             android:layout_width="150dp"
@@ -57,86 +58,69 @@
             />
     </LinearLayout>
 
+
+    <!-- Resposible for setting out Lat/Lon labels and text views that gets updated when user moves-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:orientation="horizontal"
             android:layout_gravity="center_horizontal">
 
-
+            <!-- sets up Lat -->
             <LinearLayout
                 android:layout_width="180dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:orientation="vertical">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="20dp"
-                        android:paddingLeft="90dp"
-                        android:textSize="25dp"
-                        android:text="Lat"/>
-                </LinearLayout>
 
-                <LinearLayout
+                <!-- Lat Textview used as a label-->
+                <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:paddingTop="20dp"
+                    android:paddingLeft="90dp"
+                    android:textSize="25dp"
+                    android:text="Lat"/>
+
+                <!-- Lat Textview that gets updated-->
                 <TextView
                     android:id="@+id/lat_val"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="80dp"
-
-                    android:text="Lon_val"/>
-                </LinearLayout>
-
+                    android:text="Lat_val"/>
             </LinearLayout>
-
+            <!-- sets up Lon -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="20dp"
-                        android:paddingLeft="52dp"
-                        android:textSize="25dp"
-                        android:text="Lon"/>
-                </LinearLayout>
 
-                <LinearLayout
+                <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:id="@+id/lon_val"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="50dp"
-                        android:text="Lat_val"/>
-                </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:paddingTop="20dp"
+                    android:paddingLeft="52dp"
+                    android:textSize="25dp"
+                    android:text="Lon"/>
+
+                <TextView
+                    android:id="@+id/lon_val"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="50dp"
+                    android:text="Lon_val"/>
             </LinearLayout>
-
         </LinearLayout>
 
-
+    <!--Drop down list (From GPS, Waikato Uni, etc) -->
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/spinner" />
 
-    <LinearLayout
-        android:layout_width="150dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
+    <!-- MAP SELECTION Button-->
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -144,7 +128,6 @@
             android:id="@+id/button"
             android:text="MAP SELECTION"/>
 
-    </LinearLayout>
 
 </LinearLayout>
 
