@@ -127,12 +127,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Updating lifecycle status
         updateLog("Lifecycle","onCreate");
         updateGpsStatus(Status.UNKNOWN);
 
         //Getting package manager  & Asking if this phone has GPS
         PackageManager packageManager = this.getPackageManager();
         boolean hasGPS = packageManager.hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS);
+        //If phone has gps set GPS Status textview to unknown otherwise unavailable
         if(hasGPS)
             updateGpsStatus(Status.UNKNOWN);
         else

@@ -14,7 +14,6 @@ public class SpinnerItem {
         this.label = label;
         this.uri = uri;
     }
-
     @Override
     public String toString() {
         return this.label;
